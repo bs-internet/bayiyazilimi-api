@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Bayi Yazılımı API
-  version: "1.1.1"
+  version: "1.1.5"
   license:
     name: AGPL-3.0-only
     url: https://github.com/bs-internet/bayiyazilimi/blob/main/LICENSE
@@ -30,7 +30,8 @@ info:
     ## Yetkiler
 
     Her uç nokta bir yetki ister; yetkisi olmayan anahtar `403` alır. Anahtara yalnız panelde aynı işi yapabilen
-    kullanıcının sahip olduğu yetkiler verilebilir.
+    kullanıcının sahip olduğu yetkiler verilebilir. Bu sınır her istekte yeniden uygulanır: anahtarın sahibinin rolünden
+    ilgili panel izni kaldırılırsa anahtar o yetkiyi hemen kullanamaz (`403`); izin geri verilince yeniden çalışır.
 
     | Yetki | Kapsam |
     |---|---|
@@ -137,7 +138,7 @@ paths:
                     type: object
                     properties:
                       name: { type: string }
-                      version: { type: string, example: "1.1.1" }
+                      version: { type: string, example: "1.1.5" }
                       api_version: { type: string, example: v1 }
                       currency: { type: string, example: TRY }
                       token:
