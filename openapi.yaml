@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Bayi Yazılımı API
-  version: "1.1.5"
+  version: "1.1.6"
   license:
     name: AGPL-3.0-only
     url: https://github.com/bs-internet/bayiyazilimi/blob/main/LICENSE
@@ -138,7 +138,7 @@ paths:
                     type: object
                     properties:
                       name: { type: string }
-                      version: { type: string, example: "1.1.5" }
+                      version: { type: string, example: "1.1.6" }
                       api_version: { type: string, example: v1 }
                       currency: { type: string, example: TRY }
                       token:
