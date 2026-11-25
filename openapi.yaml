@@ -154,6 +154,9 @@ paths:
     get:
       tags: [Ürünler]
       summary: Ürün listesi
+      description: |
+        Ürünleri sayfalı listeler (`updated_at, id` sıralı). `q` ad, ürün kodu ya da barkodda arar; `sku` tek ürün kodunu, `status` aktif / pasif durumunu süzer.
+        Artımlı eşitleme için son çekimin zamanını `updated_since` olarak gönderin.
       operationId: listProducts
       x-ability: products:read
       parameters:
@@ -197,6 +200,8 @@ paths:
     get:
       tags: [Ürünler]
       summary: Ürün
+      description: |
+        Tek ürünü ürün koduyla (SKU) döndürür: fiyat, KDV, birimler, kategori, marka ve depo bazında stok. Ürün yoksa 404.
       operationId: getProduct
       x-ability: products:read
       responses:
@@ -295,6 +300,9 @@ paths:
     get:
       tags: [Stok]
       summary: Depo bazında stok
+      description: |
+        Depo bazında stok miktarlarını sayfalı döndürür. `sku` tek ürünü, `warehouse` tek depoyu (depo kodu) süzer.
+        `quantity` depodaki kayıtlı miktardır. Ürünün satılabilir toplamı için `GET /products/{sku}` yanıtındaki `stock.sellable` alanına bakın.
       operationId: listStock
       x-ability: products:read
       parameters:
@@ -365,6 +373,8 @@ paths:
     get:
       tags: [Tanımlar]
       summary: Kategoriler
+      description: |
+        Kategorileri sayfalı listeler; her kategori üst kategorisinin kısa adıyla (`parent`) gelir. `status` ile süzülür, `updated_since` ile artımlı çekilir.
       operationId: listCategories
       x-ability: products:read
       parameters:
@@ -386,6 +396,8 @@ paths:
     post:
       tags: [Tanımlar]
       summary: Kategori ekle
+      description: |
+        Kategori ekler. `name` zorunludur; `slug` verilmezse addan üretilir. `parent` üst kategorinin kısa adıdır. Yeni kayıt 201 ile döner.
       operationId: createCategory
       x-ability: catalog:write
       requestBody:
@@ -404,6 +416,8 @@ paths:
     patch:
       tags: [Tanımlar]
       summary: Kategori güncelle
+      description: |
+        Kategoriyi kısa adıyla bulup yalnız gönderilen alanları değiştirir. `parent: null` kategoriyi üst seviyeye taşır.
       operationId: updateCategory
       x-ability: catalog:write
       parameters: [{ name: slug, in: path, required: true, schema: { type: string } }]
@@ -422,6 +436,8 @@ paths:
     get:
       tags: [Tanımlar]
       summary: Markalar
+      description: |
+        Markaları sayfalı listeler. `status` ile süzülür, `updated_since` ile artımlı çekilir.
       operationId: listBrands
       x-ability: products:read
       parameters:
@@ -440,6 +456,8 @@ paths:
     post:
       tags: [Tanımlar]
       summary: Marka ekle
+      description: |
+        Marka ekler. `name` zorunludur; `slug` verilmezse addan üretilir. Yeni kayıt 201 ile döner.
       operationId: createBrand
       x-ability: catalog:write
       requestBody:
@@ -457,6 +475,8 @@ paths:
     patch:
       tags: [Tanımlar]
       summary: Marka güncelle
+      description: |
+        Markayı kısa adıyla bulup yalnız gönderilen alanları değiştirir.
       operationId: updateBrand
       x-ability: catalog:write
       parameters: [{ name: slug, in: path, required: true, schema: { type: string } }]
@@ -471,6 +491,8 @@ paths:
     get:
       tags: [Tanımlar]
       summary: Depolar
+      description: |
+        Tüm depoları döndürür (sayfasız). Stok yazarken ve sorgularken depo `code` ile belirtilir; `is_default` varsayılan depoyu gösterir.
       operationId: listWarehouses
       x-ability: products:read
       responses:
@@ -495,6 +517,8 @@ paths:
     get:
       tags: [Tanımlar]
       summary: Para birimleri ve kurlar
+      description: |
+        Para birimlerini ve güncel kurlarını döndürür (sayfasız). `exchange_rate` ana para birimine göre kurdur (string), `rate_updated_at` son kur güncellemesidir.
       operationId: listCurrencies
       x-ability: products:read
       responses:
@@ -520,6 +544,8 @@ paths:
     get:
       tags: [Tanımlar]
       summary: Kargo firmaları
+      description: |
+        Kargo firmalarını döndürür (sayfasız). Sipariş oluştururken kargo firması bu listedeki kimlikle seçilir.
       operationId: listCarriers
       x-ability: orders:read
       responses:
@@ -528,6 +554,8 @@ paths:
     get:
       tags: [Tanımlar]
       summary: Bayi grupları
+      description: |
+        Bayi gruplarını döndürür (sayfasız): grup indirimi (`discount_rate`) ve grup kredi limiti (`credit_limit`, tanımsızsa null). Cari hesap açarken `dealer_group_id` olarak kullanılır.
       operationId: listDealerGroups
       x-ability: accounts:read
       responses:
@@ -536,6 +564,8 @@ paths:
     get:
       tags: [Siparişler]
       summary: Sipariş listesi
+      description: |
+        Siparişleri sayfalı listeler. `status` sipariş durumunu, `payment_status` ödeme durumunu süzer. ERP aktarımı için `updated_since` ile yalnız değişen siparişleri çekin.
       operationId: listOrders
       x-ability: orders:read
       parameters:
@@ -608,6 +638,8 @@ paths:
     get:
       tags: [Siparişler]
       summary: Sipariş
+      description: |
+        Tek siparişi sipariş numarasıyla döndürür: satırlar, tutarlar (string), adresler, ödeme ve kargo bilgisi, fatura bilgisi.
       operationId: getOrder
       x-ability: orders:read
       parameters: [{ name: number, in: path, required: true, schema: { type: string } }]
@@ -663,6 +695,8 @@ paths:
     get:
       tags: [Cari hesaplar]
       summary: Cari hesaplar
+      description: |
+        Cari hesapları bakiyeleriyle sayfalı listeler. `type` müşteri türünü (bayi / müşteri) süzer, `updated_since` ile artımlı çekilir.
       operationId: listAccounts
       x-ability: accounts:read
       parameters:
@@ -715,6 +749,8 @@ paths:
     patch:
       tags: [Cari hesaplar]
       summary: Cari hesap güncelle
+      description: |
+        Cari hesabı koduyla bulup yalnız gönderilen alanları değiştirir (ünvan, vergi bilgisi, bayi grubu, indirim, ödeme şekli, kredi limiti, vade günü). Hesap kodu değiştirilemez.
       operationId: updateAccount
       x-ability: accounts:write
       requestBody:
@@ -729,6 +765,8 @@ paths:
     get:
       tags: [Cari hesaplar]
       summary: Cari hareketler
+      description: |
+        Cari hesabın hareketlerini (borç / alacak) sayfalı döndürür. `from` / `to` tarih aralığını süzer.
       operationId: listAccountTransactions
       x-ability: accounts:read
       parameters:
@@ -774,6 +812,8 @@ paths:
     get:
       tags: [Webhook'lar]
       summary: Webhook adresleri
+      description: |
+        Kayıtlı webhook adreslerini, abone oldukları olayları ve son gönderim zamanını döndürür. İmza anahtarı (secret) bu listede gelmez; yalnız oluştururken bir kez gösterilir.
       operationId: listWebhooks
       x-ability: webhooks:manage
       responses:
@@ -817,6 +857,8 @@ paths:
     get:
       tags: [Webhook'lar]
       summary: Olay listesi
+      description: |
+        Abone olunabilecek olayları ve Türkçe adlarını döndürür. Eklentilerin eklediği olaylar da bu listededir. `*` tüm olaylara abone eder.
       operationId: listWebhookEvents
       x-ability: webhooks:manage
       responses:
@@ -826,6 +868,8 @@ paths:
     patch:
       tags: [Webhook'lar]
       summary: Webhook güncelle (aç / kapat, olaylar)
+      description: |
+        Webhook adresini, olay listesini, açıklamasını ya da aktifliğini değiştirir. Pasif adrese gönderim yapılmaz.
       operationId: updateWebhook
       x-ability: webhooks:manage
       requestBody:
@@ -842,6 +886,8 @@ paths:
     delete:
       tags: [Webhook'lar]
       summary: Webhook sil
+      description: |
+        Webhook adresini siler; bu adrese artık gönderim yapılmaz. 204 döner.
       operationId: deleteWebhook
       x-ability: webhooks:manage
       responses:
@@ -850,6 +896,8 @@ paths:
     post:
       tags: [Webhook'lar]
       summary: Deneme gönderimi
+      description: |
+        Adrese `ping` olayıyla deneme gönderimi yapar. Gönderim kuyruğa girer ve 202 ile döner; sonucu `/deliveries` ile izleyin.
       operationId: pingWebhook
       x-ability: webhooks:manage
       parameters: [{ name: id, in: path, required: true, schema: { type: string, format: uuid } }]
@@ -859,6 +907,8 @@ paths:
     get:
       tags: [Webhook'lar]
       summary: Son gönderimler
+      description: |
+        Adresin son gönderimlerini (en yeni önce) döndürür: olay, durum, deneme sayısı, yanıt kodu. `limit` 1–100, varsayılan 50.
       operationId: listWebhookDeliveries
       x-ability: webhooks:manage
       parameters:
